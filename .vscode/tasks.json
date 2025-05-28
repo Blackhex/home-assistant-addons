@@ -14,6 +14,34 @@
         "panel": "new"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Build Firefly III",
+      "type": "shell",
+      "command": "docker build -t firefly-iii firefly-iii",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Run Firefly III",
+      "type": "shell",
+      "command": "docker run -d --name firefly-iii -e APP_KEY=CHANGEME_32_CHARS_EuC5dfn3LAPzeO -e DB_CONNECTION=sqlite_internal -p 3475:8080 firefly-iii",
+      "group": "test",
+      "dependsOn": "Build Firefly III",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Stop Firefly III",
+      "type": "shell",
+      "command": "docker stop firefly-iii; docker rm firefly-iii",
+      "group": "test",
+      "presentation": {
+        "panel": "shared"
+      }
     }
   ]
 }

@@ -1,0 +1,44 @@
+arch:
+  - aarch64
+description: "A personal finances manager"
+devices: []
+environment:
+  TRUSTED_PROXIES: "**"
+image: "ghcr.io/blackhex/firefly-iii"
+init: false
+ingress: true
+map:
+  - "config:rw"
+  - "share:rw"
+name: "Firefly III"
+options:
+  APP_KEY: "CHANGEME_32_CHARS_EuC5dfn3LAPzeO"
+  CONFIG_LOCATION: "/config/addons_config/firefly-iii/config.yaml"
+  DB_CONNECTION: "sqlite_internal"
+  silent: "true"
+panel_icon: mdi:cash-multiple
+ports:
+  "8080/tcp": 8099
+  "8443/tcp": null
+ports_description:
+  "8080/tcp": "Web interface"
+  "8443/tcp": "SSL web interface"
+schema:
+  APP_KEY: "str"
+  CONFIG_LOCATION: "str"
+  DB_CONNECTION: "list(sqlite_internal|mariadb_addon|mysql|pgsql)"
+  DB_DATABASE: "str?"
+  DB_HOST: "str?"
+  DB_PASSWORD: "str?"
+  DB_PORT: "str?"
+  DB_USERNAME: "str?"
+  Updates: "list(|hourly|daily|weekly)?"
+  silent: "bool?"
+services:
+  - "mysql:want"
+slug: firefly-iii
+startup: services
+udev: true
+url: "https://github.com/Blackhex/home-assistant-addons/tree/main/firefly-iii"
+version: dev
+webui: "[PROTO:ssl]://[HOST]:[PORT:8080]"
