@@ -1,0 +1,57 @@
+name: Publish add-on
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Add-on name"
+        required: true
+        default: "Firefly III"
+      id:
+        description: "Add-on ID"
+        required: true
+        default: "firefly-iii"
+
+jobs:
+  publish-image:
+    name: Publish ${{ inputs.name }} Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ inputs.name }} Docker image
+        if: false
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.id }}
+          file: ${{ inputs.id }}/Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ghcr.io/blackhex/${{ inputs.id }}:latest
+            ghcr.io/blackhex/${{ inputs.id }}:${{ github.sha }}
+
+      - name: Build ${{ inputs.name }} add-on
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --aarch64 \
+            --target "/data/${{ inputs.id }}" \
+            --image "${{ inputs.id }}" \
+            --docker-hub "ghcr.io/blackhex" \
+            --addon
