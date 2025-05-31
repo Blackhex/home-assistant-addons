@@ -6,6 +6,8 @@ environment:
   TRUSTED_PROXIES: "**"
 image: "ghcr.io/blackhex/firefly-iii"
 init: false
+ingress: true
+ingress_port: 3475
 map:
   - "config:rw"
   - "share:rw"
@@ -15,6 +17,7 @@ options:
   CONFIG_LOCATION: "/config/addons_config/firefly-iii/config.yaml"
   DB_CONNECTION: "sqlite_internal"
   silent: "true"
+panel_icon: mdi:coin
 ports:
   "8080/tcp": 3475
   "8443/tcp": null
