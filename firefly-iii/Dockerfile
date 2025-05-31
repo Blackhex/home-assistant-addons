@@ -1,31 +1,48 @@
-ARG BUILD_FROM
-ARG BUILD_VERSION
-FROM fireflyiii/core:latest
+FROM fireflyiii/base:latest
 
 # Set S6 wait time
 ENV S6_CMD_WAIT_FOR_SERVICES=1 \
     S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0 \
     S6_SERVICES_GRACETIME=0
 
-# Change upload folder to "ha_upload" since the default one is binded to a volume (see base image).
 USER root
-RUN sed -i "s/'root'   => storage_path('upload'),/'root'   => storage_path('ha_upload'),/g" /var/www/html/config/filesystems.php
-
 COPY rootfs/ /
 
 RUN if [ ! -f /bin/sh ] && [ -f /usr/bin/sh ]; then ln -s /usr/bin/sh /bin/sh; fi && \
     if [ ! -f /bin/bash ] && [ -f /usr/bin/bash ]; then ln -s /usr/bin/bash /bin/bash; fi
 
+# Download Firefly III
+USER www-data
+ENV DOWNLOAD_URL="https://github.com/firefly-iii/firefly-iii/releases/download/v6.2.16/FireflyIII-v6.2.16.zip"
+RUN curl -s -o /var/www/download.zip -A "Mozilla/5.0" -sSL $DOWNLOAD_URL
+
+# Extract Firefly III and make sure the relevant paths have the necessary access rights.
+RUN unzip -q /var/www/download.zip -d $FIREFLY_III_PATH && \
+    chmod -R 775 $FIREFLY_III_PATH/storage && \
+    rm /var/www/download.zip
+
+# Change upload folder to "ha_upload" since the default one is binded to a volume (see base image).
+USER root
+RUN sed -i "s/'root'   => storage_path('upload'),/'root'   => storage_path('ha_upload'),/g" /var/www/html/config/filesystems.php
+
 # Automatic modules
+USER root
 ARG MODULES="00-banner.sh 01-custom_script.sh 00-global_var.sh 01-config_yaml.sh"
-RUN /ha_automodules.sh "$MODULES"
+COPY scripts/ha_automodules.sh /usr/local/bin/ha_automodules.sh
+RUN /usr/local/bin/ha_automodules.sh "$MODULES"; rm /usr/local/bin/ha_automodules.sh
 
 # Automatic apps
 ENV PACKAGES="cron mariadb-client sudo"
-RUN /ha_autoapps.sh "$PACKAGES"
+COPY scripts/ha_autoapps.sh /usr/local/bin/ha_autoapps.sh
+RUN /usr/local/bin/ha_autoapps.sh "$PACKAGES"; rm /usr/local/bin/ha_autoapps.sh
+
+# Upstream entrypoint script
+COPY scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod uga+x /usr/local/bin/entrypoint.sh
 
 # Entrypoint modifications
-RUN /ha_entrypoint_modif.sh
+COPY scripts/ha_entrypoint_modif.sh /usr/local/bin/ha_entrypoint_modif.sh
+RUN /usr/local/bin/ha_entrypoint_modif.sh; rm /usr/local/bin/ha_entrypoint_modif.sh
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
