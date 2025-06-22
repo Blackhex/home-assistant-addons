@@ -1,0 +1,10 @@
+arch:
+  - aarch64
+description: "A template for Home Assistant addons."
+init: false
+name: "Addon Template"
+options: {}
+schema: {}
+slug: "addon-template"
+startup: services
+version: "dev"
