@@ -1,0 +1,76 @@
+{
+  "inputs": [
+    {
+      "args": "http://localhost:7123",
+      "command": "simpleBrowser.api.open",
+      "id": "openHomeAssistant",
+      "type": "command"
+    }
+  ],
+  "tasks": [
+    {
+      "command": ": '${input:openHomeAssistant}'",
+      "dependsOn": [
+        "Home Assistant/Restore Snapshot",
+        "Home Assistant/Await Core"
+      ],
+      "dependsOrder": "sequence",
+      "label": "Home Assistant/Open in Browser",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "type": "shell"
+    },
+    {
+      "command": "docker inspect -f '{{.State.Status}}' hassio_supervisor 2>/dev/null | grep -q running || supervisor_run",
+      "group": "test",
+      "label": "Home Assistant/Start Supervisor",
+      "presentation": {
+        "panel": "new",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/await-core.sh\"",
+      "label": "Home Assistant/Await Core",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/ha-snapshot.sh\" restore",
+      "label": "Home Assistant/Restore Snapshot",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/ha-snapshot.sh\" capture",
+      "group": "test",
+      "label": "Home Assistant/Capture Snapshot",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    }
+  ],
+  "version": "2.0.0"
+}

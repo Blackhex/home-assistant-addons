@@ -1,0 +1,56 @@
+{
+  "appPort": [
+    "7123:8123",
+    "7357:4357",
+    "3481:3481",
+    "8085:8085"
+  ],
+  "containerEnv": {
+    "SUPERVISOR_CHANNEL": "stable",
+    "WORKSPACE_DIRECTORY": "${containerWorkspaceFolder}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mhutchie.git-graph",
+        "davidanson.vscode-markdownlint",
+        "exiasr.hadolint",
+        "timonwong.shellcheck",
+        "esbenp.prettier-vscode",
+        "ms-vscode-remote.remote-containers",
+        "darthminos.workspace-tasks"
+      ],
+      "settings": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "files.trimTrailingWhitespace": true,
+        "task.allowAutomaticTasks": "on",
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
+          }
+        }
+      }
+    }
+  },
+  "image": "ghcr.io/home-assistant/devcontainer:apps",
+  "mounts": [
+    "type=volume,source=${devcontainerId}-var-lib-docker,target=/var/lib/docker",
+    "type=volume,source=${devcontainerId}-var-lib-containerd,target=/var/lib/containerd",
+    "type=volume,source=${devcontainerId}-mnt-supervisor,target=/mnt/supervisor",
+    "type=tmpfs,target=/tmp"
+  ],
+  "name": "Home Assistant add-ons by Blackhex",
+  "overrideCommand": false,
+  "postStartCommand": "bash devcontainer_bootstrap && bash ${containerWorkspaceFolder}/.devcontainer/bootstrap.sh",
+  "remoteUser": "vscode",
+  "runArgs": [
+    "-e",
+    "GIT_EDITOR=code --wait",
+    "--privileged"
+  ],
+  "workspaceFolder": "/mnt/supervisor/apps/local/${localWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=${containerWorkspaceFolder},type=bind,consistency=cached"
+}
