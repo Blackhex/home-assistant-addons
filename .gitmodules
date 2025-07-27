@@ -1,0 +1,7 @@
+[submodule "addons-example"]
+	path = addons-example
+	url = https://github.com/home-assistant/addons-example.git
+[submodule "submodules/addon-panelsense"]
+	path = submodules/addon-panelsense
+[submodule "submodules/addon-roundcube"]
+	path = submodules/addon-roundcube

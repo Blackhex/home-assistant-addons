@@ -16,32 +16,76 @@
       "problemMatcher": []
     },
     {
-      "label": "Build Firefly III",
+      "label": "Build/Template",
       "type": "shell",
-      "command": "docker build -t firefly-iii firefly-iii",
+      "command": ".vscode\\build-addon.ps1 template @('BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest', 'REPO_URL=https://github.com/Blackhex/firefly-iii.git')",
       "group": "build",
       "presentation": {
         "panel": "shared"
       }
     },
     {
-      "label": "Run Firefly III",
+      "label": "Build/Firefly III",
       "type": "shell",
-      "command": "docker run -d --name firefly-iii -e APP_KEY=CHANGEME_32_CHARS_EuC5dfn3LAPzeO -e DB_CONNECTION=sqlite_internal -p 3475:8080 firefly-iii",
-      "group": "test",
-      "dependsOn": "Build Firefly III",
+      "command": ".vscode\\build-addon.ps1 firefly-iii",
+      "group": "build",
       "presentation": {
         "panel": "shared"
       }
     },
     {
-      "label": "Stop Firefly III",
+      "label": "Build Firefly III Dev",
       "type": "shell",
-      "command": "docker stop firefly-iii; docker rm firefly-iii",
-      "group": "test",
+      "command": "docker build --build-arg BUILD_FROM=\"ghcr.io/hassio-addons/base/amd64:stable\" -t firefly-iii-dev firefly-iii-dev",
+      "group": "build",
       "presentation": {
         "panel": "shared"
       }
-    }
+    },
+    {
+      "label": "Run Firefly III Dev",
+      "type": "shell",
+      "command": "docker run --rm firefly-iii-dev",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build Angular",
+      "type": "shell",
+      "command": "docker build --build-arg BUILD_FROM=\"ghcr.io/hassio-addons/base/amd64:stable\" -t angular-hello-addon angular-hello-addon",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build/Firefly III Dev",
+      "type": "shell",
+      "command": "docker build --build-arg BUILD_FROM=\"ghcr.io/hassio-addons/base/amd64:stable\" -t firefly-iii-dev firefly-iii-dev",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build/Angular",
+      "type": "shell",
+      "command": "docker build --build-arg BUILD_FROM=\"ghcr.io/hassio-addons/base/amd64:stable\" -t angular-hello-addon angular-hello-addon",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Run/Firefly III Dev",
+      "type": "shell",
+      "command": "docker run --rm firefly-iii-dev",
+      "group": "build",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
   ]
 }

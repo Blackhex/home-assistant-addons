@@ -1,0 +1,35 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+
+mkdir -p /var/www
+cd /var/www || exit
+
+bashio::log.info "Updating Firefly III..."
+  if [[ ! -d firefly-iii ]]; then
+    git clone --depth 1 https://github.com/Blackhex/firefly-iii.git
+    cd firefly-iii || exit
+  else
+    cd firefly-iii || exit
+    git clean -fdx
+    git reset --hard HEAD
+    git pull
+  fi
+bashio::log.info "Firefly III update done."
+
+bashio::log.info "Building Firefly III PHP..."
+  ln -s /etc/firefly-iii/.env .env
+  touch /var/www/firefly-iii/storage/database/database.sqlite
+  composer install --no-dev
+
+  php artisan firefly-iii:upgrade-database
+  php artisan firefly-iii:correct-database
+  php artisan firefly-iii:report-integrity
+  php artisan firefly-iii:laravel-passport-keys
+bashio::log.info "Building Firefly III PHP done."
+
+bashio::log.info "Building Firefly III JavaScript..."
+  npm install
+  npm run prod  --workspace=v1
+  npm run build --workspace=v2
+  npm update
+bashio::log.info "Building Firefly III JavaScript done."
