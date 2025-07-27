@@ -1,0 +1,7 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+
+bashio::log.info "Starting PHP-FPM..."
+bashio::log.info "PHP-FPM config:\n $(cat /etc/php84/php-fpm.d/ingress.conf)"
+
+exec php-fpm84 -R --nodaemonize

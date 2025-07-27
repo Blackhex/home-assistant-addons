@@ -1,0 +1,10 @@
+arch:
+  - aarch64
+  - amd64
+description: "Addon template with PHP ingress support"
+ingress: true
+ingress_port: 8099
+init: false
+name: "Ingress PHP Template"
+slug: "ingress-php-template"
+version: "1.0.0"
