@@ -1,0 +1,23 @@
+{
+  "extensions": {
+    "recommendations": [
+      "davidanson.vscode-markdownlint",
+      "exiasr.hadolint",
+      "timonwong.shellcheck",
+      "esbenp.prettier-vscode",
+      "ms-vscode-remote.remote-containers",
+      "darthminos.workspace-tasks"
+    ]
+  },
+  "folders": [
+    {
+      "name": "Repository",
+      "path": "."
+    },
+    {
+      "name": "Example",
+      "path": "../hassio-addons-app-example"
+    }
+  ],
+  "settings": {}
+}
