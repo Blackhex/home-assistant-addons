@@ -1,0 +1,5 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+bashio::log.info "Configuring ${NAME}..."
+
+exec /usr/bin/config.sh

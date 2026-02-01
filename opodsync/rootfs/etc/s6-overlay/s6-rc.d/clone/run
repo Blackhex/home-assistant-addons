@@ -1,0 +1,5 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+bashio::log.info "Cloning ${NAME}..."
+
+exec /usr/bin/clone.sh
