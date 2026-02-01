@@ -1,0 +1,5 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+bashio::log.info "Redirecting logs..."
+
+exec /usr/bin/logs.sh
