@@ -5,6 +5,12 @@
       "command": "simpleBrowser.api.open",
       "id": "openHomeAssistant",
       "type": "command"
+    },
+    {
+      "args": "http://localhost:3481",
+      "command": "simpleBrowser.api.open",
+      "id": "openOpodsync",
+      "type": "command"
     }
   ],
   "tasks": [
@@ -64,6 +70,50 @@
       "command": "bash \"${workspaceFolder}/.devcontainer/ha-snapshot.sh\" capture",
       "group": "test",
       "label": "Home Assistant/Capture Snapshot",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/install-app.sh\" local_opodsync",
+      "group": "test",
+      "label": "Apps/oPodSync/Install",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/start-app.sh\" local_opodsync && : '${input:openOpodsync}'",
+      "group": "test",
+      "label": "Apps/oPodSync/Start",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/rebuild-app.sh\" local_opodsync",
+      "group": "test",
+      "label": "Apps/oPodSync/Rebuild",
+      "presentation": {
+        "panel": "shared",
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "bash \"${workspaceFolder}/.devcontainer/uninstall-app.sh\" local_opodsync",
+      "group": "test",
+      "label": "Apps/oPodSync/Uninstall",
       "presentation": {
         "panel": "shared",
         "reveal": "always"
