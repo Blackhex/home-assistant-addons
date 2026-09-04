@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Copilot CLI Settings</title>
+  <link rel="stylesheet" href="./sessions.css" />
+  <link rel="stylesheet" href="./settings.css" />
+  <link rel="stylesheet" href="./ha-theme.css" />
+  <script src="./ha-theme.js" defer></script>
+  <script src="./settings.js" defer></script>
+</head>
+
+<body>
+  <header class="toolbar">
+    <div class="brand">
+      <div class="product-mark" aria-hidden="true">&gt;_</div>
+      <div class="product-name">
+        <span>Home Assistant app</span>
+        <strong>Copilot CLI</strong>
+      </div>
+    </div>
+
+    <nav class="session-controls" aria-label="Copilot pages">
+      <a class="secondary-action toolbar-link" href="./">Sessions</a>
+    </nav>
+  </header>
+
+  <main class="settings-main">
+    <div class="settings-shell">
+      <div class="settings-title">
+        <h1>Settings</h1>
+        <span id="settings-load-state" role="status" aria-live="polite"></span>
+      </div>
+
+      <section class="settings-section" aria-labelledby="model-settings-title">
+        <div class="settings-section-heading">
+          <h2 id="model-settings-title">Model</h2>
+        </div>
+        <form class="model-form" id="model-form">
+          <label class="field">
+            <span>Model</span>
+            <input id="model" name="model" type="text" list="model-suggestions" maxlength="80" required />
+            <datalist id="model-suggestions">
+              <option value="auto"></option>
+              <option value="gpt-5.4"></option>
+              <option value="claude-sonnet-4.6"></option>
+              <option value="claude-opus-4.6"></option>
+            </datalist>
+          </label>
+          <label class="field">
+            <span>Mode</span>
+            <select id="mode" name="mode">
+              <option value="interactive">Interactive</option>
+              <option value="plan">Plan</option>
+              <option value="autopilot">Autopilot</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Context</span>
+            <select id="context" name="context">
+              <option value="default">Default</option>
+              <option value="long_context">Long context</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Reasoning effort</span>
+            <select id="reasoning-effort" name="reasoning_effort">
+              <option value="default">Default</option>
+              <option value="none">None</option>
+              <option value="minimal">Minimal</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="xhigh">Extra high</option>
+              <option value="max">Maximum</option>
+            </select>
+          </label>
+          <div class="form-actions model-actions">
+            <button class="primary-action" type="submit">Save model</button>
+            <span class="form-status" id="model-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="settings-section" aria-labelledby="skills-title">
+        <div class="settings-section-heading">
+          <h2 id="skills-title">Skills</h2>
+          <span id="skills-count"></span>
+        </div>
+        <form class="inline-add-form" id="skill-form">
+          <label class="field grow-field">
+            <span>Source</span>
+            <input id="skill-source" name="source" type="text" maxlength="2048"
+              placeholder="HTTPS SKILL.md URL or /config path" required />
+          </label>
+          <button class="primary-action" type="submit">Add skill</button>
+        </form>
+        <span class="form-status" id="skill-status" role="status" aria-live="polite"></span>
+        <div class="settings-list" id="skills-list"></div>
+        <p class="empty-settings" id="skills-empty" hidden>No added skills.</p>
+      </section>
+
+      <section class="settings-section" aria-labelledby="plugins-title">
+        <div class="settings-section-heading">
+          <h2 id="plugins-title">Plugins</h2>
+          <span id="plugins-count"></span>
+        </div>
+        <form class="inline-add-form" id="plugin-form">
+          <label class="field grow-field">
+            <span>Source</span>
+            <input id="plugin-source" name="source" type="text" maxlength="2048"
+              placeholder="plugin@marketplace, owner/repo, or HTTPS Git URL" required />
+          </label>
+          <button class="primary-action" type="submit">Install plugin</button>
+        </form>
+        <span class="form-status" id="plugin-status" role="status" aria-live="polite"></span>
+        <div class="settings-list" id="plugins-list"></div>
+        <p class="empty-settings" id="plugins-empty" hidden>No installed plugins.</p>
+      </section>
+
+      <section class="settings-section" aria-labelledby="mcp-title">
+        <div class="settings-section-heading">
+          <h2 id="mcp-title">MCP servers</h2>
+          <span id="mcp-count"></span>
+        </div>
+        <details class="add-disclosure" id="mcp-disclosure">
+          <summary>Add MCP server</summary>
+          <form class="mcp-form" id="mcp-form" autocomplete="off">
+            <div class="mcp-primary-fields">
+              <label class="field">
+                <span>Name</span>
+                <input id="mcp-name" name="name" type="text" maxlength="64"
+                  pattern="[A-Za-z0-9][A-Za-z0-9._\x2D]*"
+                  required />
+              </label>
+              <fieldset class="transport-field">
+                <legend>Transport</legend>
+                <div class="segmented-control">
+                  <label><input type="radio" name="transport" value="stdio" checked /><span>stdio</span></label>
+                  <label><input type="radio" name="transport" value="http" /><span>HTTP</span></label>
+                  <label><input type="radio" name="transport" value="sse" /><span>SSE</span></label>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="transport-settings" data-transport-panel="stdio">
+              <label class="field">
+                <span>Command</span>
+                <input id="mcp-command" name="command" type="text" maxlength="1024" />
+              </label>
+              <label class="field">
+                <span>Arguments</span>
+                <textarea id="mcp-arguments" name="arguments" rows="3" placeholder="One argument per line"></textarea>
+              </label>
+              <label class="field">
+                <span>Environment</span>
+                <textarea id="mcp-environment" name="environment" rows="3" placeholder="KEY=value, one per line"
+                  spellcheck="false"></textarea>
+              </label>
+            </div>
+
+            <div class="transport-settings" data-transport-panel="remote" hidden>
+              <label class="field">
+                <span>Server URL</span>
+                <input id="mcp-url" name="url" type="url" maxlength="2048" />
+              </label>
+              <label class="field">
+                <span>Headers</span>
+                <textarea id="mcp-headers" name="headers" rows="3" placeholder="Name: value, one per line"
+                  spellcheck="false"></textarea>
+              </label>
+            </div>
+
+            <div class="mcp-secondary-fields">
+              <label class="field">
+                <span>Tools</span>
+                <input id="mcp-tools" name="tools" type="text" value="*" maxlength="2048" />
+              </label>
+              <label class="field">
+                <span>Timeout (ms)</span>
+                <input id="mcp-timeout" name="timeout" type="number" min="100" max="300000" step="100" />
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-action" type="submit">Add server</button>
+              <span class="form-status" id="mcp-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </details>
+        <div class="settings-list" id="mcp-list"></div>
+        <p class="empty-settings" id="mcp-empty" hidden>No configured MCP servers.</p>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="delete-dialog" id="remove-dialog" aria-labelledby="remove-dialog-title">
+    <div class="delete-dialog-content">
+      <h2 id="remove-dialog-title">Remove item?</h2>
+      <p id="remove-dialog-message"></p>
+      <p class="delete-warning">This removes the item from Copilot's persistent configuration.</p>
+      <div class="delete-dialog-actions">
+        <button class="secondary-action" id="cancel-remove" type="button">Cancel</button>
+        <button class="danger-action" id="confirm-remove" type="button">Remove</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+
+</html>

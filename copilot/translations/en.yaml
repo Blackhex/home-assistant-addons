@@ -1,0 +1,5 @@
+---
+configuration:
+  github_token:
+    name: GitHub token
+    description: Optional manual fallback. The guided app web UI uses GitHub OAuth instead.

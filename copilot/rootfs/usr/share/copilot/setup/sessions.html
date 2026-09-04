@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Copilot CLI Sessions</title>
+  <link rel="stylesheet" href="./sessions.css" />
+  <link rel="stylesheet" href="./ha-theme.css" />
+  <script src="./ha-theme.js" defer></script>
+  <script src="./sessions.js" defer></script>
+</head>
+
+<body>
+  <header class="toolbar">
+    <div class="brand">
+      <div class="product-mark" aria-hidden="true">&gt;_</div>
+      <div class="product-name">
+        <span>Home Assistant app</span>
+        <strong>Copilot CLI</strong>
+      </div>
+    </div>
+
+    <div class="session-controls">
+      <button class="secondary-action toolbar-close" id="close-session" type="button" aria-label="Close session"
+        title="Close session" aria-controls="terminal-view" hidden>×</button>
+      <a class="secondary-action toolbar-link" href="./settings.html">Settings</a>
+      <button class="primary-action" id="new-session" type="button">
+        New session
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="session-home" id="session-home">
+      <div class="recent-section">
+        <div class="section-heading">
+          <h2>Sessions</h2>
+          <span id="session-count"></span>
+        </div>
+        <div class="recent-list" id="recent-list"></div>
+        <p class="empty-sessions" id="empty-sessions" hidden>
+          No sessions yet. Start a new session to begin.
+        </p>
+      </div>
+    </section>
+
+    <section class="terminal-view" id="terminal-view" hidden>
+      <iframe id="terminal-frame" title="Copilot terminal" allow="clipboard-read; clipboard-write"></iframe>
+    </section>
+
+    <div class="launch-status" id="launch-status" role="status" aria-live="polite"></div>
+  </main>
+
+  <dialog class="delete-dialog" id="delete-dialog" aria-labelledby="delete-dialog-title">
+    <div class="delete-dialog-content">
+      <h2 id="delete-dialog-title">Delete session?</h2>
+      <p id="delete-dialog-message"></p>
+      <p class="delete-warning">This permanently removes the conversation history and cannot be undone.</p>
+      <div class="delete-dialog-actions">
+        <button class="secondary-action" id="cancel-delete" type="button">Cancel</button>
+        <button class="danger-action" id="confirm-delete" type="button">Delete</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Connect Copilot CLI</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./ha-theme.css" />
+  <script src="./ha-theme.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+
+<body>
+  <main class="shell">
+    <header class="masthead reveal">
+      <div class="product-mark" aria-hidden="true">&gt;_</div>
+      <div class="product-name">
+        <span>Home Assistant app</span>
+        <strong>Copilot CLI</strong>
+      </div>
+      <div class="ingress-status">Ingress protected</div>
+    </header>
+
+    <section class="setup-layout">
+      <div class="guide reveal reveal-delay-one">
+        <p class="eyebrow">GitHub authentication</p>
+        <h1>Sign in without handling a token.</h1>
+        <p class="lede">
+          Copilot CLI uses GitHub's device authorization flow. Approve the
+          one-time code and the add-on stores the resulting OAuth credential
+          automatically.
+        </p>
+
+        <ol class="steps" aria-label="Connection steps">
+          <li>
+            <span class="step-number">1</span>
+            <div>
+              <strong>Start authorization</strong>
+              <p>Copilot CLI requests a short-lived code from GitHub.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">2</span>
+            <div>
+              <strong>Approve on GitHub</strong>
+              <p>Sign in and enter the code shown by this add-on.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">3</span>
+            <div>
+              <strong>Return to Copilot</strong>
+              <p>The terminal opens automatically after approval.</p>
+            </div>
+          </li>
+        </ol>
+
+        <button class="primary-action" id="start-oauth" type="button" disabled>
+          Sign in with GitHub
+        </button>
+        <p class="action-note">
+          Uses secure device authorization on GitHub.com.
+        </p>
+      </div>
+
+      <section class="token-panel oauth-panel reveal reveal-delay-two">
+        <div class="panel-heading">
+          <span class="status-light" aria-hidden="true"></span>
+          <div>
+            <p>OAuth connection</p>
+            <h2>Authorize this device</h2>
+          </div>
+        </div>
+
+        <div class="oauth-idle" id="oauth-idle">
+          <p>
+            Start the flow to receive a code that expires after 15 minutes.
+            No personal access token needs to cross between browser tabs.
+          </p>
+        </div>
+
+        <div class="oauth-code" id="oauth-code" hidden>
+          <span class="code-label">One-time code</span>
+          <output id="device-code">----</output>
+          <p>Open GitHub and enter this code to authorize Copilot CLI.</p>
+          <div class="oauth-actions">
+            <a class="save-action disabled" id="open-device-page" href="#" target="_blank" rel="noopener noreferrer"
+              aria-disabled="true">
+              Open GitHub
+            </a>
+            <button class="secondary-action" id="cancel-oauth" type="button">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div class="message oauth-message" id="oauth-message" role="status" aria-live="polite"></div>
+
+        <details class="manual-auth" id="manual-auth">
+          <summary>Use a personal access token instead</summary>
+          <form id="token-form">
+            <p class="manual-intro">
+              Create a fine-grained token with the Copilot Requests permission,
+              then paste it below.
+              <a id="create-token" href="#" target="_blank" rel="noopener noreferrer">Create token</a>.
+            </p>
+            <label for="github-token">Fine-grained personal access token</label>
+            <div class="token-input">
+              <input id="github-token" name="github-token" type="password" placeholder="github_pat_..."
+                autocomplete="off" autocapitalize="none" spellcheck="false" required />
+              <button id="toggle-token" type="button" aria-label="Show token">
+                Show
+              </button>
+            </div>
+            <p class="field-help">
+              Stored as a masked add-on option and never written to the app log.
+            </p>
+            <button class="save-action" id="save-token" type="submit" disabled>
+              Save and open Copilot
+            </button>
+            <div class="message" id="token-message" role="status" aria-live="polite"></div>
+          </form>
+        </details>
+      </section>
+    </section>
+
+    <footer class="reveal reveal-delay-two">
+      OAuth credentials and configured tokens are included in Home Assistant
+      backups. Keep backups private and revoke exposed credentials in GitHub
+      settings.
+    </footer>
+  </main>
+</body>
+
+</html>
